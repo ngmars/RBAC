@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        Choose the user:
+        <select name="user">
+            {% for user in users %}
+            <option value="{{user.pk}}">{{user.username}}</option>
+            {% endfor %}
+        </select><br />
+        <select 
+            style="width: 500px;
+            height: 500px;
+            margin: 10px;" 
+            name="permissions" 
+            multiple
+        >
+            {% for permission in permissions %}
+            <option value="{{permission.id}}">{{permission.name}}</option>
+            {% endfor %}
+        </select><br />
+        <button type="submit">Assign permissions for the selected user</button>
+    </form>
+</body>
+
+</html>
