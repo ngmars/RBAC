@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        select {
+            width: 500px;
+            height: 500px;
+            margin: 10px;
+        }
+        select:focus {
+            min-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        Enter Group Name :
+        <input name="group_name" type="text" /><br />
+        Choose Permissions :
+        <select name="permissions" multiple>
+            {% for permission in permissions %}
+                <option value="{{permission.id}}">{{permission.name}}</option>
+            {% endfor %}
+        </select><br />
+        <button type="submit">Create Group</button>
+    </form>
+</body>
+</html>
