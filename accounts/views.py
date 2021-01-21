@@ -2,7 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
-
+"""for API"""
+from accounts import models
+from accounts import serializers
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import viewsets, status, filters
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
+from accounts import permissions
 
 def createRole(request):
     if request.method == "POST":
@@ -46,3 +55,17 @@ def assignPermission(request):
     return render(request, 'accounts/assignPermission.html', {
             'users': User.objects.all(), 'permissions': Permission.objects.all()
         })
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating, creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.updateOwnProfile,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email',)
+
+class UserLoginApiView(ObtainAuthToken):
+   """Handle creating user authentication tokens"""
+   renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
